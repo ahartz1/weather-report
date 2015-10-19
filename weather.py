@@ -2,6 +2,9 @@ import os
 import requests
 
 
+my_secret_key = os.environ['WU_KEY']
+
+
 class CurrentConditions(zipcode):
     pass
 
