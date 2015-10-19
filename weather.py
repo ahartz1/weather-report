@@ -1,3 +1,4 @@
+import os
 import requests
 
 
@@ -15,6 +16,7 @@ class SunriseSunset(zipcode):
 
 class WeatherAlerts(zipcode):
     pass
+
 
 class ActiveHurricanes:
     pass
