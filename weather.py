@@ -35,7 +35,8 @@ class CurrentConditions(WUndergroundInfo):
 
     def run(self):
         self.get_res()
-        city_state = self.res['current_observation']['display_location']['full']
+        city_state = self.res['current_observation'][
+            'display_location']['full']
         curr_temp = self.res['current_observation']['temp_f']
         curr_weather = self.res['current_observation']['weather']
 
@@ -43,17 +44,17 @@ class CurrentConditions(WUndergroundInfo):
                 'curr_weather': curr_weather}
 
 
-class TenDay:
+class TenDay(WUndergroundInfo):
     pass
 
 
-class SunriseSunset:
+class SunriseSunset(WUndergroundInfo):
     pass
 
 
-class WeatherAlerts:
+class WeatherAlerts(WUndergroundInfo):
     pass
 
 
-class ActiveHurricanes:
+class ActiveHurricanes(WUndergroundInfo):
     pass
