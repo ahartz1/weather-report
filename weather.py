@@ -20,10 +20,20 @@ def weather():
 
     q_string = str(zipcode) + '.json'
 
-    conditions = CurrentConditions('conditions', '94101.json')
-    res = conditions.run()
+    output = ''
 
+    conditions = CurrentConditions(q_string)
+    cc = conditions.run()
 
+    output += '\n\nWeather for {} ({})\n\n'.format(zipcode, cc['city_state'])
+    output += 'Current weather: {}˚F, {}\n'.format(cc['curr_temp'],
+                                                    cc['curr_weather'])
+
+    ten_day = TenDay('94101')
+    td = ten_day.run()
+
+    output += '10-day Forecast:\n'
+    print(output)
 
 if __name__ == "__main__":
     weather()

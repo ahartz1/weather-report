@@ -54,6 +54,8 @@ class TenDay(WUndergroundInfo):
         ret = {}
         for n in range(10):
             day = 'day' + str(n + 1)
+            ret[day] = self.res['forecast']['simpleforecast'][
+                'forecastday'][n]['date']['weekday_short']
             ret[day + '_high'] = self.res['forecast']['simpleforecast'][
                 'forecastday'][n]['high']['fahrenheit']
             ret[day + '_low'] = self.res['forecast']['simpleforecast'][

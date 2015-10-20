@@ -33,9 +33,11 @@ def test_ten_day(m):
     ten_day = TenDay('94101')
     res = ten_day.run()
 
+    assert res['day1'] == "Tue"
     assert res['day1_high'] == "75"
     assert res['day1_low'] == "55"
     assert res['day1_conditions'] == "Partly Cloudy"
+    assert res['day2'] == "Wed"
     assert res['day2_high'] == "72"
     assert res['day2_low'] == "55"
     assert res['day2_conditions'] == "Partly Cloudy"
