@@ -62,7 +62,6 @@ class TenDay(WUndergroundInfo):
                 'forecastday'][n]['low']['fahrenheit']
             ret[day + '_conditions'] = self.res['forecast']['simpleforecast'][
                 'forecastday'][n]['conditions']
-            print(ret)
         return ret
 
 

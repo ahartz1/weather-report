@@ -26,13 +26,21 @@ def weather():
     cc = conditions.run()
 
     output += '\n\nWeather for {} ({})\n\n'.format(zipcode, cc['city_state'])
-    output += 'Current weather: {}˚F, {}\n'.format(cc['curr_temp'],
-                                                    cc['curr_weather'])
+    output += 'Current weather: {}˚F, {}\n\n'.format(cc['curr_temp'],
+                                                      cc['curr_weather'])
 
     ten_day = TenDay('94101')
     td = ten_day.run()
 
     output += '10-day Forecast:\n'
+
+    for n in range(1, 11):
+        day = 'day' + str(n)
+        output += '{}: High {}˚F, Low {}˚F, {}\n'.format(
+            td[day], td[day + '_high'], td[day + '_low'],
+            td[day + '_conditions'])
+
+
     print(output)
 
 if __name__ == "__main__":
