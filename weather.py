@@ -45,7 +45,7 @@ class CurrentConditions(WUndergroundInfo):
 
 
 class TenDay(WUndergroundInfo):
-
+    '''Given zipcode, gets 10-day forecast'''
     def run(self):
         self.get_data()
         ret = {}
@@ -62,7 +62,15 @@ class TenDay(WUndergroundInfo):
 
 
 class SunriseSunset(WUndergroundInfo):
-    pass
+    '''Given zipcode, gets sunrise and sunset times'''
+    def run(self):
+        self.get_data()
+        sunrise_hour = self.res['moon_phase']['sunrise']['hour']
+        sunrise_min = self.res['moon_phase']['sunrise']['minute']
+        sunset_hour = self.res['moon_phase']['sunset']['hour']
+        sunset_min = self.res['moon_phase']['sunset']['minute']
+        return {'sunrise_hour': sunrise_hour, 'sunrise_min': sunrise_min,
+                'sunset_hour': sunset_hour, 'sunset_min': sunset_min}
 
 
 class WeatherAlerts(WUndergroundInfo):

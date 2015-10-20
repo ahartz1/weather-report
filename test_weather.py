@@ -1,6 +1,6 @@
 import os
 import requests_mock
-from weather import CurrentConditions, TenDay
+from weather import CurrentConditions, TenDay, SunriseSunset
 
 my_secret_key = os.environ['WU_KEY']
 
@@ -10,8 +10,8 @@ def test_current_conditions(m):
     fullurl = 'http://api.wunderground.com/api/{}/conditions/q/94101'.format(
         my_secret_key)
 
-    with open('current-sf.json') as curr_conditions:
-        m.get(fullurl, text=curr_conditions.read())
+    with open('current-sf.json') as data:
+        m.get(fullurl, text=data.read())
 
     conditions = CurrentConditions('conditions', '94101')
     res = conditions.run()
@@ -26,11 +26,11 @@ def test_ten_day(m):
     fullurl = 'http://api.wunderground.com/api/{}/forecast10day/q/94101' \
         .format(my_secret_key)
 
-    with open('ten-day.json') as curr_conditions:
-        m.get(fullurl, text=curr_conditions.read())
+    with open('ten-day.json') as data:
+        m.get(fullurl, text=data.read())
 
-    conditions = TenDay('forecast10day', '94101')
-    res = conditions.run()
+    ten_day = TenDay('forecast10day', '94101')
+    res = ten_day.run()
 
     assert res['day1_high'] == "75"
     assert res['day1_low'] == "55"
@@ -64,7 +64,22 @@ def test_ten_day(m):
     assert res['day10_conditions'] == "Clear"
 
 
-#
+@requests_mock.Mocker()
+def test_sunrise_sunset(m):
+    fullurl = 'http://api.wunderground.com/api/{}/astronomy/q/94101'.format(
+        my_secret_key)
+
+    with open('astronomy.json') as data:
+        m.get(fullurl, text=data.read())
+
+    sunrise_sunset = SunriseSunset('astronomy', '94101')
+    res = sunrise_sunset.run()
+
+    assert res['sunrise_hour'] == "7"
+    assert res['sunrise_min'] == "01"
+    assert res['sunset_hour'] == "16"
+    assert res['sunset_min'] == "56"
+
 
 #
 
