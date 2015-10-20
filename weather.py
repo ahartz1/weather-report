@@ -18,7 +18,7 @@ class WUndergroundInfo:
         self.q_string = q_string
         self.res = None
 
-    def get_res(self):
+    def get_data(self):
         self.res = None
         self.res = requests.get(
             'http://api.wunderground.com/api/{}/{}/q/{}'.format(
@@ -34,7 +34,7 @@ class CurrentConditions(WUndergroundInfo):
     '''Given zipcode, get full city/state and current temp in ˚F and weather'''
 
     def run(self):
-        self.get_res()
+        self.get_data()
         city_state = self.res['current_observation'][
             'display_location']['full']
         curr_temp = self.res['current_observation']['temp_f']
@@ -45,7 +45,20 @@ class CurrentConditions(WUndergroundInfo):
 
 
 class TenDay(WUndergroundInfo):
-    pass
+
+    def run(self):
+        self.get_data()
+        ret = {}
+        for n in range(10):
+            day = 'day' + str(n + 1)
+            ret[day + '_high'] = self.res['forecast']['simpleforecast'][
+                'forecastday'][n]['high']['fahrenheit']
+            ret[day + '_low'] = self.res['forecast']['simpleforecast'][
+                'forecastday'][n]['low']['fahrenheit']
+            ret[day + '_conditions'] = self.res['forecast']['simpleforecast'][
+                'forecastday'][n]['conditions']
+            print(ret)
+        return ret
 
 
 class SunriseSunset(WUndergroundInfo):

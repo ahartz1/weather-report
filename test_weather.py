@@ -1,6 +1,6 @@
 import os
 import requests_mock
-from weather import CurrentConditions
+from weather import CurrentConditions, TenDay
 
 my_secret_key = os.environ['WU_KEY']
 
@@ -19,3 +19,83 @@ def test_current_conditions(m):
     assert res['city_state'] == "San Francisco, CA"
     assert res['curr_temp'] == 66.3
     assert res['curr_weather'] == "Partly Cloudy"
+
+
+@requests_mock.Mocker()
+def test_ten_day(m):
+    fullurl = 'http://api.wunderground.com/api/{}/forecast10day/q/94101' \
+        .format(my_secret_key)
+
+    with open('ten-day.json') as curr_conditions:
+        m.get(fullurl, text=curr_conditions.read())
+
+    conditions = TenDay('forecast10day', '94101')
+    res = conditions.run()
+
+    assert res['day1_high'] == "75"
+    assert res['day1_low'] == "55"
+    assert res['day1_conditions'] == "Partly Cloudy"
+    assert res['day2_high'] == "72"
+    assert res['day2_low'] == "55"
+    assert res['day2_conditions'] == "Partly Cloudy"
+    assert res['day3_high'] == "70"
+    assert res['day3_low'] == "55"
+    assert res['day3_conditions'] == "Partly Cloudy"
+    assert res['day4_high'] == "72"
+    assert res['day4_low'] == "55"
+    assert res['day4_conditions'] == "Partly Cloudy"
+    assert res['day5_high'] == "73"
+    assert res['day5_low'] == "55"
+    assert res['day5_conditions'] == "Fog"
+    assert res['day6_high'] == "72"
+    assert res['day6_low'] == "55"
+    assert res['day6_conditions'] == "Fog"
+    assert res['day7_high'] == "70"
+    assert res['day7_low'] == "55"
+    assert res['day7_conditions'] == "Partly Cloudy"
+    assert res['day8_high'] == "75"
+    assert res['day8_low'] == "59"
+    assert res['day8_conditions'] == "Partly Cloudy"
+    assert res['day9_high'] == "73"
+    assert res['day9_low'] == "59"
+    assert res['day9_conditions'] == "Partly Cloudy"
+    assert res['day10_high'] == "73"
+    assert res['day10_low'] == "57"
+    assert res['day10_conditions'] == "Clear"
+
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
