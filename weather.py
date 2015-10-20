@@ -1,5 +1,5 @@
-from weather_lib import CurrentConditions, TenDay, SunriseSunset, \
-    WeatherAlerts, ActiveHurricanes
+from weather_lib import CurrentConditions, TenDay, SunriseSunset
+from weather_lib import WeatherAlerts, ActiveHurricanes
 
 
 def get_zipcode():
@@ -26,8 +26,16 @@ def weather():
     cc = conditions.run()
 
     output += '\n\nWeather for {} ({})\n\n'.format(zipcode, cc['city_state'])
-    output += 'Current weather: {}˚F, {}\n\n'.format(cc['curr_temp'],
-                                                      cc['curr_weather'])
+    output += 'Current weather: {}˚F, {}\n'.format(cc['curr_temp'],
+                                                    cc['curr_weather'])
+
+    sunrise_sunset = SunriseSunset('94101')
+    ss = sunrise_sunset.run()
+
+    output += 'Sunrise {}:{}, Sunset {}:{}\n\n'.format(
+        ss['sunrise_hour'], ss['sunrise_min'],
+        ss['sunset_hour'], ss['sunset_min']
+    )
 
     ten_day = TenDay('94101')
     td = ten_day.run()
@@ -39,6 +47,28 @@ def weather():
         output += '{}: High {}˚F, Low {}˚F, {}\n'.format(
             td[day], td[day + '_high'], td[day + '_low'],
             td[day + '_conditions'])
+
+    weather_alerts = WeatherAlerts('94101')
+    we_al = weather_alerts.run()
+
+    if len(we_al) > 0:
+        output += '\n\nAlerts:\n'
+        for n, alert in enumerate(we_al):
+            a = 'alert' + str(n + 1)
+            output += '{}\nIssued: {}\nExpires: {}\n'.format(
+                alert[0][a], alert[a + '_start'], alert[a + '_end']
+            )
+
+
+    hurricanes = ActiveHurricanes()
+    hur = hurricanes.run()
+
+    if len(hur) > 0:
+        output += '\n\nCurrent Hurricanes:\n'
+        for h in range(len(hur)):
+            output += '{}\nIssued: {}\nExpires: {}\n'.format(
+                hur[h]['hurricane_name'], hur[h]['hurricane_category']
+            )
 
 
     print(output)

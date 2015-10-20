@@ -108,8 +108,8 @@ def test_hurricanes(m):
     with open('json-data/hurricane.json') as data:
         m.get(fullurl, text=data.read())
 
-    weather_alerts = ActiveHurricanes()
-    res = weather_alerts.run()
+    hurricanes = ActiveHurricanes()
+    res = hurricanes.run()
 
     assert res[0]['hurricane_name'] == "Hurricane Daniel"
     assert res[0]['hurricane_category'] == 1
