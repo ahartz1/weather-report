@@ -13,14 +13,14 @@ class APIException(Exception):
 class WUndergroundInfo:
     '''Parent Class for Accessing Weather Underground API'''
 
-    def __init__(self, info_type, q_string):
-        self.info_type = info_type
-        self.q_string = q_string
+    def __init__(self, q_string):
+        self.info_type = None
+        self.q_string = str(q_string) + ".json"
         self.res = None
-        self.full_url = 'http://api.wunderground.com/api/{}/{}/q/{}'.format(
-            my_secret_key, self.info_type, self.q_string)
 
     def get_data(self):
+        self.full_url = 'http://api.wunderground.com/api/{}/{}/q/{}'.format(
+            my_secret_key, self.info_type, self.q_string)
         self.res = None
         self.res = requests.get(self.full_url)
 
@@ -34,6 +34,7 @@ class CurrentConditions(WUndergroundInfo):
     '''Given zipcode, get full city/state and current temp in ˚F and weather'''
 
     def run(self):
+        self.info_type = 'conditions'
         self.get_data()
         city_state = self.res['current_observation'][
             'display_location']['full']
@@ -48,6 +49,7 @@ class TenDay(WUndergroundInfo):
     '''Given zipcode, gets 10-day forecast'''
 
     def run(self):
+        self.info_type = 'forecast10day'
         self.get_data()
         ret = {}
         for n in range(10):
@@ -66,6 +68,7 @@ class SunriseSunset(WUndergroundInfo):
     '''Given zipcode, gets sunrise and sunset times'''
 
     def run(self):
+        self.info_type = 'astronomy'
         self.get_data()
         sunrise_hour = self.res['moon_phase']['sunrise']['hour']
         sunrise_min = self.res['moon_phase']['sunrise']['minute']
@@ -79,6 +82,7 @@ class WeatherAlerts(WUndergroundInfo):
     '''Given zipcode, gets weather alerts'''
 
     def run(self):
+        self.info_type = 'alerts'
         self.get_data()
         ret = []
         for n, alert in enumerate(self.res['alerts']):
@@ -90,13 +94,20 @@ class WeatherAlerts(WUndergroundInfo):
         return ret
 
 
-class ActiveHurricanes(WUndergroundInfo):
+class ActiveHurricanes:
     '''Get all active hurricanes'''
 
     def run(self):
-        self.full_url = 'http://api.wunderground.com/api/{}/{}/{}'.format(
-            my_secret_key, self.info_type, self.q_string)
-        self.get_data()
+        self.info_type = 'currenthurricane'
+        self.full_url = 'http://api.wunderground.com/api/{}/{}/view.json' \
+            .format(my_secret_key, self.info_type)
+        self.res = None
+        self.res = requests.get(self.full_url)
+
+        if self.res.status_code != 200:
+            raise APIException('Request did not return 200; '
+                               'request limit may have been reached.')
+        self.res = self.res.json()
         ret = {}
         for n, hurricane in enumerate(self.res['currenthurricane']):
             ret[n] = {

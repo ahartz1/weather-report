@@ -14,7 +14,7 @@ def test_current_conditions(m):
     with open('json-data/current-sf.json') as data:
         m.get(fullurl, text=data.read())
 
-    conditions = CurrentConditions('conditions', '94101.json')
+    conditions = CurrentConditions('94101')
     res = conditions.run()
 
     assert res['city_state'] == "San Francisco, CA"
@@ -30,7 +30,7 @@ def test_ten_day(m):
     with open('json-data/ten-day.json') as data:
         m.get(fullurl, text=data.read())
 
-    ten_day = TenDay('forecast10day', '94101.json')
+    ten_day = TenDay('94101')
     res = ten_day.run()
 
     assert res['day1_high'] == "75"
@@ -73,7 +73,7 @@ def test_sunrise_sunset(m):
     with open('json-data/astronomy.json') as data:
         m.get(fullurl, text=data.read())
 
-    sunrise_sunset = SunriseSunset('astronomy', '94101.json')
+    sunrise_sunset = SunriseSunset('94101')
     res = sunrise_sunset.run()
 
     assert res['sunrise_hour'] == "7"
@@ -90,7 +90,7 @@ def test_weather_alerts(m):
     with open('json-data/alerts.json') as data:
         m.get(fullurl, text=data.read())
 
-    weather_alerts = WeatherAlerts('alerts', '94101.json')
+    weather_alerts = WeatherAlerts('94101')
     res = weather_alerts.run()
 
     assert res[0]['alert1'] == "Heat Advisory"
@@ -106,7 +106,7 @@ def test_hurricanes(m):
     with open('json-data/hurricane.json') as data:
         m.get(fullurl, text=data.read())
 
-    weather_alerts = ActiveHurricanes('currenthurricane', 'view.json')
+    weather_alerts = ActiveHurricanes()
     res = weather_alerts.run()
 
     assert res[0]['hurricane_name'] == "Hurricane Daniel"
