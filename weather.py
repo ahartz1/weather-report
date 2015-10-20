@@ -17,12 +17,12 @@ class WUndergroundInfo:
         self.info_type = info_type
         self.q_string = q_string
         self.res = None
+        self.full_url = 'http://api.wunderground.com/api/{}/{}/q/{}'.format(
+            my_secret_key, self.info_type, self.q_string)
 
     def get_data(self):
         self.res = None
-        self.res = requests.get(
-            'http://api.wunderground.com/api/{}/{}/q/{}'.format(
-                my_secret_key, self.info_type, self.q_string))
+        self.res = requests.get(self.full_url)
 
         if self.res.status_code != 200:
             raise APIException('Request did not return 200; '
@@ -46,6 +46,7 @@ class CurrentConditions(WUndergroundInfo):
 
 class TenDay(WUndergroundInfo):
     '''Given zipcode, gets 10-day forecast'''
+
     def run(self):
         self.get_data()
         ret = {}
@@ -63,6 +64,7 @@ class TenDay(WUndergroundInfo):
 
 class SunriseSunset(WUndergroundInfo):
     '''Given zipcode, gets sunrise and sunset times'''
+
     def run(self):
         self.get_data()
         sunrise_hour = self.res['moon_phase']['sunrise']['hour']
@@ -75,37 +77,31 @@ class SunriseSunset(WUndergroundInfo):
 
 class WeatherAlerts(WUndergroundInfo):
     '''Given zipcode, gets weather alerts'''
+
     def run(self):
         self.get_data()
-        alerts = []
+        ret = []
         for n, alert in enumerate(self.res['alerts']):
-            alerts.append({
+            ret.append({
                 'alert' + str(n + 1): alert.get('description'),
                 'alert' + str(n + 1) + '_start': alert.get('date'),
                 'alert' + str(n + 1) + '_end': alert.get('expires'),
             })
-        return alerts
+        return ret
+
 
 class ActiveHurricanes(WUndergroundInfo):
-    pass
+    '''Get all active hurricanes'''
 
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
+    def run(self):
+        self.full_url = 'http://api.wunderground.com/api/{}/{}/{}'.format(
+            my_secret_key, self.info_type, self.q_string)
+        self.get_data()
+        ret = {}
+        for n, hurricane in enumerate(self.res['currenthurricane']):
+            ret[n] = {
+                'hurricane_name': hurricane['stormInfo']['stormName_Nice'],
+                'hurricane_category': hurricane['Current'][
+                    'SaffirSimpsonCategory'],
+            }
+        return ret

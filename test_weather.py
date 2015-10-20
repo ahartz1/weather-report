@@ -1,19 +1,20 @@
 import os
 import requests_mock
-from weather import CurrentConditions, TenDay, SunriseSunset, WeatherAlerts
+from weather import CurrentConditions, TenDay, SunriseSunset, WeatherAlerts, \
+    ActiveHurricanes
 
 my_secret_key = os.environ['WU_KEY']
 
 
 @requests_mock.Mocker()
 def test_current_conditions(m):
-    fullurl = 'http://api.wunderground.com/api/{}/conditions/q/94101'.format(
-        my_secret_key)
+    fullurl = 'http://api.wunderground.com/api/{}/conditions/q/94101.json' \
+        .format(my_secret_key)
 
     with open('json-data/current-sf.json') as data:
         m.get(fullurl, text=data.read())
 
-    conditions = CurrentConditions('conditions', '94101')
+    conditions = CurrentConditions('conditions', '94101.json')
     res = conditions.run()
 
     assert res['city_state'] == "San Francisco, CA"
@@ -23,13 +24,13 @@ def test_current_conditions(m):
 
 @requests_mock.Mocker()
 def test_ten_day(m):
-    fullurl = 'http://api.wunderground.com/api/{}/forecast10day/q/94101' \
+    fullurl = 'http://api.wunderground.com/api/{}/forecast10day/q/94101.json' \
         .format(my_secret_key)
 
     with open('json-data/ten-day.json') as data:
         m.get(fullurl, text=data.read())
 
-    ten_day = TenDay('forecast10day', '94101')
+    ten_day = TenDay('forecast10day', '94101.json')
     res = ten_day.run()
 
     assert res['day1_high'] == "75"
@@ -66,13 +67,13 @@ def test_ten_day(m):
 
 @requests_mock.Mocker()
 def test_sunrise_sunset(m):
-    fullurl = 'http://api.wunderground.com/api/{}/astronomy/q/94101'.format(
-        my_secret_key)
+    fullurl = 'http://api.wunderground.com/api/{}/astronomy/q/94101.json' \
+        .format(my_secret_key)
 
     with open('json-data/astronomy.json') as data:
         m.get(fullurl, text=data.read())
 
-    sunrise_sunset = SunriseSunset('astronomy', '94101')
+    sunrise_sunset = SunriseSunset('astronomy', '94101.json')
     res = sunrise_sunset.run()
 
     assert res['sunrise_hour'] == "7"
@@ -83,13 +84,13 @@ def test_sunrise_sunset(m):
 
 @requests_mock.Mocker()
 def test_weather_alerts(m):
-    fullurl = 'http://api.wunderground.com/api/{}/astronomy/q/94101'.format(
+    fullurl = 'http://api.wunderground.com/api/{}/alerts/q/94101.json'.format(
         my_secret_key)
 
     with open('json-data/alerts.json') as data:
         m.get(fullurl, text=data.read())
 
-    weather_alerts = WeatherAlerts('astronomy', '94101')
+    weather_alerts = WeatherAlerts('alerts', '94101.json')
     res = weather_alerts.run()
 
     assert res[0]['alert1'] == "Heat Advisory"
@@ -97,34 +98,16 @@ def test_weather_alerts(m):
     assert res[0]['alert1_end'] == "7:00 AM CDT on July 07, 2012"
 
 
-#
+@requests_mock.Mocker()
+def test_hurricanes(m):
+    fullurl = 'http://api.wunderground.com/api/{}/currenthurricane/view.json' \
+        .format(my_secret_key)
 
-#
+    with open('json-data/hurricane.json') as data:
+        m.get(fullurl, text=data.read())
 
-#
+    weather_alerts = ActiveHurricanes('currenthurricane', 'view.json')
+    res = weather_alerts.run()
 
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
+    assert res[0]['hurricane_name'] == "Hurricane Daniel"
+    assert res[0]['hurricane_category'] == 1
