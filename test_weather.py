@@ -1,7 +1,7 @@
 import os
 import requests_mock
-from weather_lib import CurrentConditions, TenDay, SunriseSunset, WeatherAlerts, \
-    ActiveHurricanes
+from weather_lib import CurrentConditions, TenDay, SunriseSunset, \
+    WeatherAlerts, ActiveHurricanes
 
 my_secret_key = os.environ['WU_KEY']
 
