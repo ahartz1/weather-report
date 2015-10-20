@@ -1,6 +1,6 @@
 import os
 import requests_mock
-from weather import CurrentConditions, TenDay, SunriseSunset
+from weather import CurrentConditions, TenDay, SunriseSunset, WeatherAlerts
 
 my_secret_key = os.environ['WU_KEY']
 
@@ -81,7 +81,21 @@ def test_sunrise_sunset(m):
     assert res['sunset_min'] == "56"
 
 
-#
+@requests_mock.Mocker()
+def test_weather_alerts(m):
+    fullurl = 'http://api.wunderground.com/api/{}/astronomy/q/94101'.format(
+        my_secret_key)
+
+    with open('alerts.json') as data:
+        m.get(fullurl, text=data.read())
+
+    weather_alerts = WeatherAlerts('astronomy', '94101')
+    res = weather_alerts.run()
+
+    assert res[0]['alert1'] == "Heat Advisory"
+    assert res[0]['alert1_start'] == "11:14 am CDT on July 3, 2012"
+    assert res[0]['alert1_end'] == "7:00 AM CDT on July 07, 2012"
+
 
 #
 

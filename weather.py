@@ -74,8 +74,38 @@ class SunriseSunset(WUndergroundInfo):
 
 
 class WeatherAlerts(WUndergroundInfo):
-    pass
-
+    '''Given zipcode, gets weather alerts'''
+    def run(self):
+        self.get_data()
+        alerts = []
+        for n, alert in enumerate(self.res['alerts']):
+            alerts.append({
+                'alert' + str(n + 1): alert.get('description'),
+                'alert' + str(n + 1) + '_start': alert.get('date'),
+                'alert' + str(n + 1) + '_end': alert.get('expires'),
+            })
+        return alerts
 
 class ActiveHurricanes(WUndergroundInfo):
     pass
+
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
