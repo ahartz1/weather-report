@@ -10,7 +10,7 @@ def test_current_conditions(m):
     fullurl = 'http://api.wunderground.com/api/{}/conditions/q/94101'.format(
         my_secret_key)
 
-    with open('current-sf.json') as data:
+    with open('json-data/current-sf.json') as data:
         m.get(fullurl, text=data.read())
 
     conditions = CurrentConditions('conditions', '94101')
@@ -26,7 +26,7 @@ def test_ten_day(m):
     fullurl = 'http://api.wunderground.com/api/{}/forecast10day/q/94101' \
         .format(my_secret_key)
 
-    with open('ten-day.json') as data:
+    with open('json-data/ten-day.json') as data:
         m.get(fullurl, text=data.read())
 
     ten_day = TenDay('forecast10day', '94101')
@@ -69,7 +69,7 @@ def test_sunrise_sunset(m):
     fullurl = 'http://api.wunderground.com/api/{}/astronomy/q/94101'.format(
         my_secret_key)
 
-    with open('astronomy.json') as data:
+    with open('json-data/astronomy.json') as data:
         m.get(fullurl, text=data.read())
 
     sunrise_sunset = SunriseSunset('astronomy', '94101')
@@ -86,7 +86,7 @@ def test_weather_alerts(m):
     fullurl = 'http://api.wunderground.com/api/{}/astronomy/q/94101'.format(
         my_secret_key)
 
-    with open('alerts.json') as data:
+    with open('json-data/alerts.json') as data:
         m.get(fullurl, text=data.read())
 
     weather_alerts = WeatherAlerts('astronomy', '94101')
