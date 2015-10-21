@@ -29,7 +29,7 @@ def weather():
     output += 'Current weather: {}˚F, {}\n'.format(cc['curr_temp'],
                                                     cc['curr_weather'])
 
-    sunrise_sunset = SunriseSunset('94101')
+    sunrise_sunset = SunriseSunset(zipcode)
     ss = sunrise_sunset.run()
 
     output += 'Sunrise {}:{}, Sunset {}:{}\n\n'.format(
@@ -37,7 +37,7 @@ def weather():
         ss['sunset_hour'], ss['sunset_min']
     )
 
-    ten_day = TenDay('94101')
+    ten_day = TenDay(zipcode)
     td = ten_day.run()
 
     output += '10-day Forecast:\n'
@@ -48,7 +48,7 @@ def weather():
             td[day], td[day + '_high'], td[day + '_low'],
             td[day + '_conditions'])
 
-    weather_alerts = WeatherAlerts('94101')
+    weather_alerts = WeatherAlerts(zipcode)
     we_al = weather_alerts.run()
 
     if len(we_al) > 0:
