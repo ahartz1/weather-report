@@ -60,14 +60,15 @@ def weather():
             )
 
 
+
     hurricanes = ActiveHurricanes()
     hur = hurricanes.run()
 
     if len(hur) > 0:
         output += '\n\nCurrent Hurricanes:\n'
-        for h in range(len(hur)):
-            output += '{}\nIssued: {}\nExpires: {}\n'.format(
-                hur[h]['hurricane_name'], hur[h]['hurricane_category']
+        for n in range(len(hur)):
+            output += 'Storm: {}, Category: {}\n'.format(
+                hur[n]['hurricane_name'], hur[n]['hurricane_category']
             )
 
 

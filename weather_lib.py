@@ -109,11 +109,12 @@ class ActiveHurricanes:
             raise APIException('Request did not return 200; '
                                'request limit may have been reached.')
         self.res = self.res.json()
-        ret = {}
+        ret = []
         for n, hurricane in enumerate(self.res['currenthurricane']):
-            ret[n] = {
-                'hurricane_name': hurricane['stormInfo']['stormName_Nice'],
-                'hurricane_category': hurricane['Current'][
-                    'SaffirSimpsonCategory'],
-            }
+            if hurricane['Current']['Category'] == "Hurricane":
+                ret.append({
+                    'hurricane_name': hurricane['stormInfo']['stormName_Nice'],
+                    'hurricane_category': hurricane['Current'][
+                        'SaffirSimpsonCategory'],
+                })
         return ret
