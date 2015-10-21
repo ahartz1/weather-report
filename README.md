@@ -29,4 +29,4 @@ Enter a valid zipcode and get:
 
 * Save your Weather Underground key as a variable in your local environment by adding the following line to the `.envrc` file in this repo's directory on your computer: `export WU_KEY=whatever-your-real-key-is`
 
-* **TO RUN THE PROGRAM** run `python3 weather.py` on the command line.
+* **TO RUN THE PROGRAM** run **`python3 weather.py`** on the command line.
