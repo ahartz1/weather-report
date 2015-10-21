@@ -18,11 +18,9 @@ def get_zipcode():
 def weather():
     zipcode = get_zipcode()
 
-    q_string = str(zipcode) + '.json'
-
     output = ''
 
-    conditions = CurrentConditions(q_string)
+    conditions = CurrentConditions(zipcode)
     cc = conditions.run()
 
     output += '\n\nWeather for {} ({})\n\n'.format(zipcode, cc['city_state'])
