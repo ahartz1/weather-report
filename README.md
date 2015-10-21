@@ -25,6 +25,8 @@ Enter a valid zipcode and get:
 
 * Using your favorite command line program (e.g., Terminal on Mac&nbsp;OS&nbsp;X), install the requirements file in your virtual environment: `pip install -r requirements.txt`.
 
-* **This program requires a Weather Underground API Key**, so you will need to (1) sign up for the website and (2) sign up for a key.
+* **This program requires a Weather Underground API Key**, so you will need to (1) [sign up for the website](http://www.wunderground.com/weather/api) and (2) sign up for a key.
 
 * Save your Weather Underground key as a variable in your local environment by adding the following line to the `.envrc` file in this repo's directory on your computer: `export WU_KEY=whatever-your-real-key-is`
+
+* **TO RUN THE PROGRAM** run `python3 weather.py` on the command line.
